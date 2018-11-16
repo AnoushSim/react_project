@@ -3,7 +3,9 @@ import CodeMirror from 'react-codemirror';
 import PropTypes from 'prop-types'
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
-import  'codemirror/theme/night.css'
+import  'codemirror/theme/night.css';
+import '../../../styles/codeMirror.css'
+
 
 class codeEditor extends React.Component{
 
@@ -32,11 +34,7 @@ class codeEditor extends React.Component{
     };
 
     render(){
-        let options = {
-            theme: 'night',
-            //readOnly: 'nocursor',
-
-        }
+        let {options} = this.props;
         return(
             <CodeMirror value={this.state.code} onChange={this.update} options = {options} />
         )
@@ -46,12 +44,14 @@ class codeEditor extends React.Component{
 };
 
 codeEditor.propTypes = {
+    options: PropTypes.object.isRequired,
     code: PropTypes.string.isRequired,
     updateCodeRef: PropTypes.func
 };
 
 codeEditor.defaultProps = {
-    code: 'var y \nvar x'
+    code: 'var y \nvar x',
+    options:  { theme: 'night', readOnly: 'nocursor'}
 };
 
 export default codeEditor;

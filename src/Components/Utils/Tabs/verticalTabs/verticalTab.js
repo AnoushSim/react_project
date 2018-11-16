@@ -12,7 +12,7 @@ const VerticalTabs = withStyles(theme => ({
         background: '#313538',
         color: 'white',
         width: '265px',
-        height: '1000px',
+        height: '1050px',
         wrap: true,
 
     }

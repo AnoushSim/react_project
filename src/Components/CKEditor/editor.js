@@ -9,8 +9,7 @@ const options = {
     toolbar: 'full',
     language: 'en',
     uiColor: '#157fb6',
-    width: '700px',
-    height: '990px',
+    height: '335px',
     toolbar_full: [
         {
             name: 'basicstyles',

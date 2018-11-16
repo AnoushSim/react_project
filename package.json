@@ -6,13 +6,17 @@
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
+    "lodash": "latest",
     "prop-types": "latest",
     "react": "^16.6.0",
     "react-ckeditor-component": "^1.1.0",
     "react-codemirror": "^1.0.0",
+    "react-customscroll": "^4.0.5",
     "react-dom": "^16.6.0",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
-    "react-toastify": "^4.4.1"
+    "react-toastify": "^4.4.1",
+    "validator": "^10.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
