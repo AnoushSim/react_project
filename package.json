@@ -13,10 +13,14 @@
     "react-codemirror": "^1.0.0",
     "react-customscroll": "^4.0.5",
     "react-dom": "^16.6.0",
+    "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "react-toastify": "^4.4.1",
-    "validator": "^10.9.0"
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "validator": "^10.9.0",
+    "react-router-redux": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

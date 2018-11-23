@@ -33,7 +33,7 @@ const styles = theme => ({
         margin: '10px',
         height: 440,
         overflow: 'scroll',
-        background: '#0a001f',
+        background: '#2b2b2b',
         width: '48%',
         [theme.breakpoints.down('md')] : {
             width: '100%'
@@ -69,6 +69,10 @@ const styles = theme => ({
         background: '#313538',
         display: 'flex',
         flexDirection: 'row',
+    },
+    tabs: {
+        textTransform: 'none',
+        fontSize: 16
     }
 })
 

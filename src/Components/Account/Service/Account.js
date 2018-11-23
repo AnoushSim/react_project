@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Tabs from '../../Utils/Tabs/verticalTabs/verticalTab';
 import Tab from '../../Utils/Tabs/selectedTab/selectedTab';
 import CodeMirror from '../../Utils/codeEditor/codeMirror';
@@ -105,7 +104,7 @@ class Account extends React.Component {
 
                                 </div>
                             }</TabContainer>
-                        }
+                        } else return null
                     })}
                 </div>}
             </div>

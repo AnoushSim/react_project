@@ -3,7 +3,7 @@ import CodeMirror from 'react-codemirror';
 import PropTypes from 'prop-types'
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
-import  'codemirror/theme/night.css';
+import  'codemirror/theme/darcula.css';
 import '../../../styles/codeMirror.css'
 
 
@@ -51,7 +51,7 @@ codeEditor.propTypes = {
 
 codeEditor.defaultProps = {
     code: 'var y \nvar x',
-    options:  { theme: 'night', readOnly: 'nocursor'}
+    options:  { theme: 'darcula', readOnly: 'nocursor'}
 };
 
 export default codeEditor;

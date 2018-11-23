@@ -1,3 +1,13 @@
 .CodeMirror {
     height: auto;
+    font-size: 14px;
+    font-family: sans-serif
+}
+
+.CodeMirror pre {
+    padding: 0 15px;
+}
+
+.CodeMirror-scroll {
+    overflow: auto;
 }

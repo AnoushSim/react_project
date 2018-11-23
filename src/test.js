@@ -8,16 +8,18 @@ import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
-import { connect } from "react-redux";
-import { getAction, saveAction, deleteAction, addAction } from "../../../actions/contentAction";
-import {validateInput, existingSubtitle} from '../../../utils/Validations/validateInput'
-import Tabs from '../../Utils/Tabs/verticalTabs/verticalTab';
-import Tab from '../../Utils/Tabs/selectedTab/selectedTab';
-import CKEditor from '../../CKEditor/editor';
-import ToastContainer from '../../Utils/Toast/toast';
-import CodeMirror from '../../Utils/codeEditor/codeMirror'
-import logo from '../../../resources/logoDark.png'
-import styles from '../../../styles/adminStyles/adminStyles';
+import axios from 'axios';
+import {toast} from 'react-toastify';
+//import { connect } from "react-redux";
+//import { contentAction, saveAction, deleteAction } from "../../../actions/contentAction";
+import {validateInput, existingSubtitle} from './utils/Validations/validateInput'
+import Tabs from './Components/Utils/Tabs/verticalTabs/verticalTab';
+import Tab from './Components/Utils/Tabs/selectedTab/selectedTab';
+import CKEditor from './Components/CKEditor/editor';
+import ToastContainer from './Components/Utils/Toast/toast';
+import CodeMirror from './Components/Utils/codeEditor/codeMirror'
+import logo from './resources/logoDark.png'
+import styles from './styles/adminStyles/adminStyles';
 
 
 function TabContainer(props) {
@@ -39,6 +41,7 @@ class Admin extends React.Component {
         super(props);
         this.state = {
             value: 0,
+            content: [],
             codeUpdate: '',
             textUpdate: '',
             subtitleUpdate: '',
@@ -56,14 +59,22 @@ class Admin extends React.Component {
 
 
     componentWillMount() {
-         this.props.getAction();
-    }
-
-    componentDidUpdate(nextProps, nextState) {
-        if(JSON.stringify(this.props.content) !== JSON.stringify(nextProps.content)) {
-            this.handleChange(null,this.state.value)
-        }
-
+        let url = 'http://localhost:3003/content';
+        fetch(url)
+            .then(response => {
+                return response.json()
+            })
+            .then(myJson => {
+                if (myJson) {
+                    let content = myJson.body
+                    if(content.length === 0) {
+                        content.push({subtitle: '', text: '', code: ''})
+                    }
+                    this.setState({
+                        content: content
+                    });
+                }
+            });
     }
 
     handleChange = (event, value) => {
@@ -87,46 +98,55 @@ class Admin extends React.Component {
 
 
     save = (event) => {
-        let obj = this.props.content[this.state.value];
+        let obj = this.state.content[this.state.value];
         if (this.state.textUpdate || this.state.codeUpdate || this.state.subtitleUpdate) {
+            let url = 'http://localhost:3003/content?subtitle=' + obj.subtitle;
             let updatedData = {
-                subtitle: (this.state.subtitleUpdate || obj.subtitle).trim(),
+                subtitle: this.state.subtitleUpdate || obj.subtitle,
                 text: this.state.textUpdate || obj.text,
                 code: this.state.codeUpdate || obj.code
             };
 
             //for newly created subtitle and its content
-            if(obj.subtitle === '' &&  this.state.subtitleUpdate) {
-                if (existingSubtitle(obj, this.props.content, this.state.subtitleUpdate.trim())) {
-                    return
-                }
+            if(existingSubtitle(obj,this.state.content,this.state.subtitleUpdate)) {
+                return
             }
-            console.log(updatedData);
+
+            let req = {
+                url: url,
+                method: 'PUT',
+                data: updatedData
+            }
             if(this.isValid(updatedData)) {
-                this.props.saveAction(obj,updatedData);
-                this.setState({
-                    subtitleUpdate: '',
-                    textUpdate: '',
-                    codeUpdate: ''
+                axios(req)
+                    .then(res => {
+                        if (res.data.success)
+                            toast.success('Updated!');
+                        else
+                            toast.error(res.data.message || 'Cannot update.');
+                        this.setState({
+                            subtitleUpdate: '',
+                            textUpdate: '',
+                            codeUpdate: ''
+                        })
 
-                });
+                    });
+            }
 
-            };
         }
 
-    };
 
-
-
+    }
 
 
     create = (event) => {
 
-        let {content} = this.props;
+        let {content} = this.state;
         let [last] = [...content].reverse();
         if(last.subtitle !== '') {
-            this.props.addAction();
+            content.push({subtitle: '', text: '', code: ''});
             this.setState((state) => ({
+                content: content,
                 value: content.length - 1
             }))
         } else
@@ -140,12 +160,16 @@ class Admin extends React.Component {
 
     delete = (event) => {
 
-        let obj = this.props.content[this.state.value];
-        this.props.deleteAction(obj.subtitle);
-        this.setState({
-            value: 0
-        })
+        let obj = this.state.content[this.state.value];
+        let url = 'http://localhost:3003/content?subtitle=' + obj.subtitle;
+        axios.delete(url)
+            .then(res => {
+                if (res.data.success)
+                    toast.success('Deleted!');
+                else
+                    toast.error(res.data.message || 'Cannot delete.');
 
+            })
     }
 
 
@@ -164,11 +188,12 @@ class Admin extends React.Component {
 
 
     render() {
-        const { value } = this.state;
-        const { classes } = this.props;
-        const { content } = this.props;
+
+        const {value} = this.state;
+        const {classes} = this.props;
+        const {content} = this.state;
         const tabs = content.map((elem) =>
-            <Tab label={elem.subtitle} key={elem.subtitle} className={classes.tabs}/>);
+            <Tab label={elem.subtitle} key={elem.subtitle}/>);
 
 
         return (
@@ -249,8 +274,6 @@ class Admin extends React.Component {
                                 </div>
                             }</TabContainer>
                         }
-                        else
-                            return null
                     })}
                 </div>}
             </div>
@@ -260,16 +283,7 @@ class Admin extends React.Component {
 
 Admin.propTypes = {
     classes: PropTypes.object.isRequired,
-    content: PropTypes.array.isRequired,  //from state
-    getAction: PropTypes.func.isRequired,
-    saveAction: PropTypes.func.isRequired,
-    deleteAction: PropTypes.func.isRequired
+    contents: PropTypes.object.isRequired,  //from state
 };
 
-Admin.defaultProps = {
-    content: []
-}
-const styledAdmin = withStyles(styles)(Admin);
-
-export default connect(state => {
-        return state }, {getAction, saveAction, deleteAction, addAction}) (styledAdmin);
+export default withStyles(styles)(Admin);
