@@ -8,7 +8,7 @@ import {EDIT_CONTENT,
 
 export function getAction() {
     return dispatch => {
-        return ContentService.get('http://localhost:3003/content')
+        return ContentService.get('/content')
             .then(res => {
                 /*if(!res.success)
                      toast.error(res.message)*/
@@ -34,7 +34,7 @@ export function getAction() {
 
 export function saveAction(object,content){
    return dispatch => {
-       return ContentService.put('http://localhost:3003/content?subtitle=' + object.subtitle, content)
+       return ContentService.put('/content?subtitle=' + object.subtitle, content)
            .then(res => {
                if(res.data.success){
 
@@ -61,7 +61,7 @@ export function deleteAction(subtitle){
             })
         }
         else {
-            return ContentService.remove('http://localhost:3003/content?subtitle=' + subtitle)
+            return ContentService.remove('/content?subtitle=' + subtitle)
                 .then(res => {
                     if (res.data.success) {
                         toast.success('Deleted!');
