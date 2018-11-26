@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, Switch , BrowserRouter} from 'react-router-dom';
 import Admin from '../Components/Admin/Service/Admin';
-import Account from "../Components/Account/Service/Account";
-import Test from '../Components/Test/Test';
+import Account from '../Components/Test/Test';
 
 class Routes extends React.Component{
     render(){
@@ -12,8 +11,7 @@ class Routes extends React.Component{
                     <Switch>
                          <Route exact path='/admin' component={Admin}/>
                          <Route exact path='/account' component={Account}/>
-                         <Route exact path='/test' component={Test}/>
-                    </Switch>
+                   </Switch>
                 </BrowserRouter>
             </div>
         )
